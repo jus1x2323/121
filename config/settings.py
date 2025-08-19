@@ -13,6 +13,9 @@ ADMIN_ID = int(os.getenv("ADMIN_ID", 0))
 if not BOT_TOKEN:
     raise ValueError("BOT_TOKEN не установлен в переменных окружения")
 
+if ADMIN_ID == 0:
+    raise ValueError("ADMIN_ID не установлен в переменных окружения")
+
 # Database Configuration
 DATABASE_PATH = "bot.db"
 BACKUP_DIR = "backups"
