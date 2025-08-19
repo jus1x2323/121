@@ -8,13 +8,21 @@ load_dotenv(ROOT_DIR / '.env')
 
 # Bot Configuration
 BOT_TOKEN = os.getenv("BOT_TOKEN")
-ADMIN_ID = int(os.getenv("ADMIN_ID", 0))
+ADMIN_ID_STR = os.getenv("ADMIN_ID", "0")
 
-if not BOT_TOKEN:
-    raise ValueError("BOT_TOKEN не установлен в переменных окружения")
+if not BOT_TOKEN or BOT_TOKEN.startswith("YOUR_"):
+    raise ValueError("BOT_TOKEN не установлен в переменных окружения. Пожалуйста, установите реальный токен в .env файле")
+
+try:
+    ADMIN_ID = int(ADMIN_ID_STR)
+except ValueError:
+    if ADMIN_ID_STR.startswith("YOUR_"):
+        raise ValueError("ADMIN_ID не установлен в переменных окружения. Пожалуйста, установите реальный ID в .env файле")
+    else:
+        raise ValueError(f"ADMIN_ID должен быть числом, получено: {ADMIN_ID_STR}")
 
 if ADMIN_ID == 0:
-    raise ValueError("ADMIN_ID не установлен в переменных окружения")
+    raise ValueError("ADMIN_ID не может быть 0. Пожалуйста, установите реальный ID в .env файле")
 
 # Database Configuration
 DATABASE_PATH = "bot.db"
